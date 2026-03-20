@@ -33,9 +33,11 @@ public static class HostBuilderExtensionsSource
         foreach (var type in types)
         {
             var fullName = type.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat).Replace("global::", "");
-            var sectionName = type.Name;
-
-
+            var attribute = type.GetAttributes()
+                .FirstOrDefault(x => x?.AttributeClass?.Name == OptifyAttributeSource.ClassName);
+            var sectionNameArg = attribute?.NamedArguments
+                .FirstOrDefault(x => x.Key == OptifyAttributeSource.SectionNamePropertyName);
+            var sectionName = sectionNameArg?.Value.Value as string ?? type.Name;
             sb.AppendLine("            services");
             sb.AppendLine($"               .AddOptions<{fullName}>()");
             sb.AppendLine($"               .Bind(ctx.Configuration.GetSection(\"{sectionName}\"));");

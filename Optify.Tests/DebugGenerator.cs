@@ -28,9 +28,12 @@ file static class DebugGeneratorSource
         """
         using Optify;
         namespace CSharpCodeGen;
-        
+
         [Optify] public class Config;
-        
+
+        [Optify(SectionName = "OverrideNamedDummySettings")]
+        public class NamedDummySettings;
+
         internal partial class Program
         {
             private static void Main()
