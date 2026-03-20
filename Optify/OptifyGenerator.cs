@@ -8,28 +8,16 @@ namespace Optify;
 [Generator]
 public class OptifyGenerator : IIncrementalGenerator
 {
-    private const string AttributeMetadataName = "Optify.OptifyAttribute";
-
     public void Initialize(IncrementalGeneratorInitializationContext context)
     {
         context.RegisterPostInitializationOutput(static ctx =>
         {
-            ctx.AddSource(
-                "OptifyAttribute.g.cs",
-                """
-                using System;
-                namespace Optify;
-
-                [AttributeUsage(AttributeTargets.Class)]
-                internal sealed class OptifyAttribute : Attribute
-                {
-                }
-                """);
+            ctx.AddSource(OptifyAttributeSource.Filename, OptifyAttributeSource.Source);
         });
 
         var provider = context.SyntaxProvider
             .ForAttributeWithMetadataName(
-                AttributeMetadataName,
+                OptifyAttributeSource.AttributeMetadataName,
                 static (node, _) => node is ClassDeclarationSyntax or RecordDeclarationSyntax,
                 static (ctx, _) =>
                 {
