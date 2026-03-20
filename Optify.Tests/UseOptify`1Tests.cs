@@ -37,6 +37,32 @@ public class UseOptifyTTests
     }
 
     [Test]
+    public async Task Registers_class_using_specified_name()
+    {
+        var host = new HostBuilder()
+            .IncludeConfiguration([new("OverrideNamedDummyClassSettings:X", "one")])
+            .UseOptify<NamedDummyClassSettings>()
+            .Build();
+
+        var options = host.Services.GetRequiredService<IOptions<NamedDummyClassSettings>>();
+
+        await Assert.That(options.Value.X).IsEqualTo("one");
+    }
+
+    [Test]
+    public async Task Registers_record_using_specified_name()
+    {
+        var host = new HostBuilder()
+            .IncludeConfiguration([new("OverrideNamedDummyRecordSettings:X", "one")])
+            .UseOptify<NamedDummyRecordSettings>()
+            .Build();
+
+        var options = host.Services.GetRequiredService<IOptions<NamedDummyRecordSettings>>();
+
+        await Assert.That(options.Value.X).IsEqualTo("one");
+    }
+
+    [Test]
     public async Task Should_not_register_other_types()
     {
         var host = new HostBuilder()
