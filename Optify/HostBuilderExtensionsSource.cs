@@ -8,6 +8,29 @@ public static class HostBuilderExtensionsSource
 {
     public const string Filename = "OptifyRegistration.g.cs";
 
+    private static string UseOptifyGenericExtensionSource =
+        """
+            public static IHostBuilder UseOptify<T>(this IHostBuilder hostBuilder) where T : class, new()
+            {
+                hostBuilder.ConfigureServices((ctx, services) =>
+                {
+                    var type = typeof(T);
+                    var attribute = type
+                        .GetCustomAttributes(typeof(OptifyAttribute), false)
+                        .FirstOrDefault(attr => attr is OptifyAttribute);
+
+                    var sectionName = attribute is OptifyAttribute {SectionName.Length: > 0} attr
+                        ? attr.SectionName
+                        : type.Name;
+
+                    services
+                        .AddOptions<T>()
+                        .Bind(ctx.Configuration.GetSection(sectionName));
+                });
+                return hostBuilder;
+            }
+        """;
+
     public static string GenerateSource(ImmutableArray<INamedTypeSymbol> types)
     {
         var sb = new StringBuilder();
@@ -47,18 +70,7 @@ public static class HostBuilderExtensionsSource
         sb.AppendLine("        return hostBuilder;");
         sb.AppendLine("    }");
         sb.AppendLine();
-        sb.AppendLine(
-            "    public static IHostBuilder UseOptify<T>(this IHostBuilder hostBuilder) where T : class, new()");
-        sb.AppendLine("    {");
-        sb.AppendLine("        hostBuilder.ConfigureServices((ctx, services) =>");
-        sb.AppendLine("        {");
-        sb.AppendLine("            services");
-        sb.AppendLine("                .AddOptions<T>()");
-        sb.AppendLine("                .Bind(ctx.Configuration.GetSection(typeof(T).Name));");
-        sb.AppendLine("        });");
-
-        sb.AppendLine("        return hostBuilder;");
-        sb.AppendLine("    }");
+        sb.AppendLine(UseOptifyGenericExtensionSource);
         sb.AppendLine("}");
 
         return sb.ToString();
