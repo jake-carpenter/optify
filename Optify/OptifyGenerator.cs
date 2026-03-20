@@ -17,6 +17,7 @@ public class OptifyGenerator : IIncrementalGenerator
             ctx.AddSource(
                 "OptifyAttribute.g.cs",
                 """
+                using System;
                 namespace Optify;
 
                 [AttributeUsage(AttributeTargets.Class)]
