@@ -29,7 +29,7 @@ public class OptifyGenerator : IIncrementalGenerator
         var provider = context.SyntaxProvider
             .ForAttributeWithMetadataName(
                 AttributeMetadataName,
-                static (node, _) => node is ClassDeclarationSyntax,
+                static (node, _) => node is ClassDeclarationSyntax or RecordDeclarationSyntax,
                 static (ctx, _) =>
                 {
                     var symbol = ctx.TargetSymbol;

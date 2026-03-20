@@ -51,6 +51,19 @@ public class OptifyTests
     }
 
     [Test]
+    public async Task Optify_registers_all_marked_records_when_no_generic_type_is_specified()
+    {
+        var host = new HostBuilder()
+            .IncludeConfiguration([new("DummyRecordSettings:X", "one")])
+            .UseOptify()
+            .Build();
+
+        var options = host.Services.GetRequiredService<IOptions<DummyRecordSettings>>();
+
+        await Assert.That(options.Value.X).IsEqualTo("one");
+    }
+
+    [Test]
     public async Task Optify_does_not_register_unmarked_types_when_no_generic_type_is_specified()
     {
         var host = new HostBuilder()
