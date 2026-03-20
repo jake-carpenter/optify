@@ -9,7 +9,7 @@ public class OptifyTests
     [Test]
     [Arguments("foo")]
     [Arguments("bar")]
-    public async Task Optify_registers_requested_generic_type_with_name_of_class_for_section(string value)
+    public async Task Optify_registers_requested_generic_class_using_convention_name(string value)
     {
         var host = new HostBuilder()
             .IncludeConfiguration([new("DummySettingsA:A", value)])
@@ -35,19 +35,19 @@ public class OptifyTests
     }
 
     [Test]
-    public async Task Optify_registers_all_marked_types_when_no_generic_type_is_specified()
+    public async Task Optify_registers_all_marked_classes_when_no_generic_type_is_specified()
     {
         var host = new HostBuilder()
             .IncludeConfiguration(new("DummySettingsA:A", "one"), new("DummySettingsB:B", "two"))
             .UseOptify()
             .Build();
 
-        var options = host.Services.GetRequiredService<IOptions<DummySettingsA>>();
-        var options2 = host.Services.GetRequiredService<IOptions<DummySettingsB>>();
+        var optionsA = host.Services.GetRequiredService<IOptions<DummySettingsA>>();
+        var optionsB = host.Services.GetRequiredService<IOptions<DummySettingsB>>();
 
         using var _ = Assert.Multiple();
-        await Assert.That(options.Value.A).IsEqualTo("one");
-        await Assert.That(options2.Value.B).IsEqualTo("two");
+        await Assert.That(optionsA.Value.A).IsEqualTo("one");
+        await Assert.That(optionsB.Value.B).IsEqualTo("two");
     }
 
     [Test]
@@ -59,7 +59,7 @@ public class OptifyTests
                 new("DummySettingsB:B", "two"),
                 new("UnmarkedSettings:Setting", "three")
             ])
-            // .UseOptify()
+            .UseOptify()
             .Build();
 
         var options = host.Services.GetService<IOptions<UnmarkedSettings>>();
