@@ -1,4 +1,3 @@
-using System.Collections.Immutable;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
@@ -24,27 +23,23 @@ public class OptifyGenerator : IIncrementalGenerator
                     if (ctx.TargetSymbol is not INamedTypeSymbol target)
                         return new OptionsTypeToRegister();
 
-                    var fullName = target
-                        .ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat)
-                        .Replace("global::", "");
-                    var attribute = ctx.TargetSymbol.GetAttributes()
-                        .FirstOrDefault(x => x?.AttributeClass?.Name == OptifyAttributeSource.ClassName);
-                    var sectionNameArg = attribute?.NamedArguments
+                    var fullName = target.ToDisplayString(
+                        SymbolDisplayFormat.FullyQualifiedFormat
+                            .WithGlobalNamespaceStyle(SymbolDisplayGlobalNamespaceStyle.Omitted));
+                    var sectionNameArg = ctx.Attributes[0].NamedArguments
                         .FirstOrDefault(x => x.Key == OptifyAttributeSource.SectionNamePropertyName);
-                    var sectionName = sectionNameArg?.Value.Value as string ?? ctx.TargetSymbol.Name;
+                    var sectionName = sectionNameArg.Value.Value as string ?? ctx.TargetSymbol.Name;
 
                     return new OptionsTypeToRegister(sectionName, fullName);
                 });
 
         context.RegisterSourceOutput(
-            provider.Collect(),
-            static (spc, symbols) =>
+            provider.Where(static opt => !opt.IsNull).Collect(),
+            static (spc, types) =>
             {
-                var types = symbols
-                    .OfType<OptionsTypeToRegister>()
-                    .Where(opt => !opt.IsNull)
-                    .ToImmutableArray();
-                spc.AddSource(HostBuilderExtensionsSource.Filename, HostBuilderExtensionsSource.GenerateSource(types));
+                spc.AddSource(
+                    HostBuilderExtensionsSource.Filename,
+                    HostBuilderExtensionsSource.GenerateSource(types));
             });
     }
 }
