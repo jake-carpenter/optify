@@ -32,6 +32,10 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.CodeAnalysis.Analyzers" Version="3.11.0" />
     <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.8.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration" Version="[10.0,)" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="[10.0,)" />
+    <PackageReference Include="Microsoft.Extensions.Options" Version="[10.0,)" />
+    <PackageReference Include="Microsoft.Extensions.Hosting" Version="[10.0,)" />
     <PackageReference Include="MinVer" Version="7.0.0">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
