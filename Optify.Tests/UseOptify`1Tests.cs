@@ -37,7 +37,7 @@ public class UseOptifyTTests
     }
 
     [Test]
-    public async Task Registers_class_using_specified_name()
+    public async Task Registers_class_using_specified_name_on_attribute()
     {
         var host = new HostBuilder()
             .IncludeConfiguration([new("OverrideNamedDummyClassSettings:X", "one")])
@@ -50,7 +50,7 @@ public class UseOptifyTTests
     }
 
     [Test]
-    public async Task Registers_record_using_specified_name()
+    public async Task Registers_record_using_specified_name_on_attribute()
     {
         var host = new HostBuilder()
             .IncludeConfiguration([new("OverrideNamedDummyRecordSettings:X", "one")])
@@ -58,6 +58,32 @@ public class UseOptifyTTests
             .Build();
 
         var options = host.Services.GetRequiredService<IOptions<NamedDummyRecordSettings>>();
+
+        await Assert.That(options.Value.X).IsEqualTo("one");
+    }
+
+    [Test]
+    public async Task Registers_class_using_specified_name_from_extension()
+    {
+        var host = new HostBuilder()
+            .IncludeConfiguration([new("OverrideDummyClassSettingsA:X", "one")])
+            .UseOptify<DummyClassSettingsA>(new OptifyOptions { SectionName = "OverrideDummyClassSettingsA" })
+            .Build();
+
+        var options = host.Services.GetRequiredService<IOptions<DummyClassSettingsA>>();
+
+        await Assert.That(options.Value.X).IsEqualTo("one");
+    }
+
+    [Test]
+    public async Task Registers_record_using_specified_name_from_extension()
+    {
+        var host = new HostBuilder()
+            .IncludeConfiguration([new("OverrideDummyRecordSettings:X", "one")])
+            .UseOptify<DummyRecordSettings>(new OptifyOptions { SectionName = "OverrideDummyRecordSettings" })
+            .Build();
+
+        var options = host.Services.GetRequiredService<IOptions<DummyRecordSettings>>();
 
         await Assert.That(options.Value.X).IsEqualTo("one");
     }
