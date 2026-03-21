@@ -19,7 +19,6 @@
     <RepositoryUrl>https://github.com/jake-carpenter/optify</RepositoryUrl>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageReadmeFile>README.md</PackageReadmeFile>
-    <PackageTags>cli</PackageTags>
     <NoWarn>$(NoWarn);PKV0032</NoWarn>
     <EnablePackageValidation>true</EnablePackageValidation>
     <MinVerTagPrefix>v</MinVerTagPrefix>
