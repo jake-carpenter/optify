@@ -8,14 +8,9 @@ public class OptifyGenerator : IIncrementalGenerator
 {
     public void Initialize(IncrementalGeneratorInitializationContext context)
     {
-        context.RegisterPostInitializationOutput(static ctx =>
-        {
-            ctx.AddSource(OptifyAttributeSource.Filename, OptifyAttributeSource.Source);
-        });
-
         var provider = context.SyntaxProvider
             .ForAttributeWithMetadataName(
-                OptifyAttributeSource.AttributeMetadataName,
+                "Optify.OptifyAttribute",
                 static (node, _) => node is ClassDeclarationSyntax or RecordDeclarationSyntax,
                 static (ctx, _) =>
                 {
@@ -27,7 +22,7 @@ public class OptifyGenerator : IIncrementalGenerator
                         SymbolDisplayFormat.FullyQualifiedFormat
                             .WithGlobalNamespaceStyle(SymbolDisplayGlobalNamespaceStyle.Omitted));
                     var sectionNameArg = ctx.Attributes[0].NamedArguments
-                        .FirstOrDefault(x => x.Key == OptifyAttributeSource.SectionNamePropertyName);
+                        .FirstOrDefault(static x => x.Key == nameof(OptifyAttribute.SectionName));
                     var sectionName = sectionNameArg.Value.Value as string ?? ctx.TargetSymbol.Name;
 
                     return new OptionsTypeToRegister(sectionName, fullName);
@@ -38,8 +33,8 @@ public class OptifyGenerator : IIncrementalGenerator
             static (spc, types) =>
             {
                 spc.AddSource(
-                    HostBuilderExtensionsSource.Filename,
-                    HostBuilderExtensionsSource.GenerateSource(types));
+                    OptifyRegistrationSource.Filename,
+                    OptifyRegistrationSource.GenerateSource(types));
             });
     }
 }
