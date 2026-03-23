@@ -23,7 +23,7 @@ public static class OptifyRegistrationSource
             {
                 /// <summary>
                 /// Register all configurable options types in the current assembly marked with the
-                /// <see cref="OptifyAttribute"/> attribute.
+                /// <see cref="OptifyOptionsAttribute"/> attribute.
                 /// </summary>
                 /// <param name="hostBuilder">The <see cref="IHostBuilder"/> instance to extend.</param>
                 /// <returns>The extended <see cref="IHostBuilder"/> instance.</returns>

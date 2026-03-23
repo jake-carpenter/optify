@@ -67,7 +67,7 @@ public class UseOptifyTTests
     {
         var host = new HostBuilder()
             .IncludeConfiguration([new("OverrideDummyClassSettingsA:X", "one")])
-            .UseOptify<DummyClassSettingsA>(new OptifyOptions { SectionName = "OverrideDummyClassSettingsA" })
+            .UseOptify<DummyClassSettingsA>(new OptifyConfiguration { SectionName = "OverrideDummyClassSettingsA" })
             .Build();
 
         var options = host.Services.GetRequiredService<IOptions<DummyClassSettingsA>>();
@@ -80,7 +80,7 @@ public class UseOptifyTTests
     {
         var host = new HostBuilder()
             .IncludeConfiguration([new("OverrideDummyRecordSettings:X", "one")])
-            .UseOptify<DummyRecordSettings>(new OptifyOptions { SectionName = "OverrideDummyRecordSettings" })
+            .UseOptify<DummyRecordSettings>(new OptifyConfiguration { SectionName = "OverrideDummyRecordSettings" })
             .Build();
 
         var options = host.Services.GetRequiredService<IOptions<DummyRecordSettings>>();

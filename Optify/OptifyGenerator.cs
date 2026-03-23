@@ -10,7 +10,7 @@ public class OptifyGenerator : IIncrementalGenerator
     {
         var provider = context.SyntaxProvider
             .ForAttributeWithMetadataName(
-                "Optify.OptifyAttribute",
+                "Optify.OptifyOptionsAttribute",
                 static (node, _) => node is ClassDeclarationSyntax or RecordDeclarationSyntax,
                 static (ctx, _) =>
                 {
@@ -22,7 +22,7 @@ public class OptifyGenerator : IIncrementalGenerator
                         SymbolDisplayFormat.FullyQualifiedFormat
                             .WithGlobalNamespaceStyle(SymbolDisplayGlobalNamespaceStyle.Omitted));
                     var sectionNameArg = ctx.Attributes[0].NamedArguments
-                        .FirstOrDefault(static x => x.Key == nameof(OptifyAttribute.SectionName));
+                        .FirstOrDefault(static x => x.Key == nameof(OptifyOptionsAttribute.SectionName));
                     var sectionName = sectionNameArg.Value.Value as string ?? ctx.TargetSymbol.Name;
 
                     return new OptionsTypeToRegister(sectionName, fullName);

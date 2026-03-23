@@ -1,6 +1,6 @@
 namespace Optify;
 
-public record OptifyOptions
+public record OptifyConfiguration
 {
     public string? SectionName { get; set; }
 }
