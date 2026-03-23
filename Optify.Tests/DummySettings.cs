@@ -1,30 +1,30 @@
 namespace Optify.Tests;
 
-[Optify]
+[OptifyOptions]
 public class DummyClassSettingsA
 {
     public string? X { get; init; }
 }
 
-[Optify]
+[OptifyOptions]
 public class DummyClassSettingsB
 {
     public string? X { get; init; }
 }
 
-[Optify]
+[OptifyOptions]
 public record DummyRecordSettings
 {
     public string? X { get; init; }
 }
 
-[Optify(SectionName = "OverrideNamedDummyClassSettings")]
+[OptifyOptions(SectionName = "OverrideNamedDummyClassSettings")]
 public class NamedDummyClassSettings
 {
     public string? X { get; init; }
 }
 
-[Optify(SectionName = "OverrideNamedDummyRecordSettings")]
+[OptifyOptions(SectionName = "OverrideNamedDummyRecordSettings")]
 public record NamedDummyRecordSettings
 {
     public string? X { get; init; }

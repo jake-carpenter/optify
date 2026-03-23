@@ -1,6 +1,9 @@
 # Optify
 
-**Optify** is a Roslyn source generator that wires [options pattern](https://learn.microsoft.com/en-us/dotnet/core/extensions/options) types into the generic host: mark a class or record with `[Optify]`, call `UseOptify()` on your `IHostBuilder`, and each type will automatically be bound to configuration based on the type name or the `SectionName` attribute.
+**Optify** is a Roslyn source generator that wires [options pattern](https://learn.microsoft.
+com/en-us/dotnet/core/extensions/options) types into the generic host: mark a class or record with `[OptifyOptions]`, 
+call 
+`UseOptify()` on your `IHostBuilder`, and each type will automatically be bound to configuration based on the type name or the `SectionName` attribute.
 
 ## Installation
 
@@ -10,19 +13,19 @@ dotnet add package Optify
 
 ## Recommended usage
 
-Mark your configuration types with `[Optify]` so registration code is generated at compile time.
+Mark your configuration types with `[OptifyOptions]` so registration code is generated at compile time.
 
-**IMPORTANT**: Types **without** `[Optify]` are not registered by `UseOptify()`.
+**IMPORTANT**: Types **without** `[OptifyOptions]` are not registered by `UseOptify()`.
 
 ### 1. Mark options types
 
-Apply `[Optify]` to types that represent configuration.
+Apply `[OptifyOptions]` to types that represent configuration.
 
 ```csharp
 using Optify;
 
 // Binds to section "MyAppSettings" by convention - matches class name.
-[Optify]
+[OptifyOptions]
 public class MyAppSettings
 {
     public string? ApiUrl { get; init; }
@@ -38,7 +41,9 @@ public record EmailSettings
 
 ### 2. Register with the host
 
-**Register every `[Optify]` type in the current assembly** (recommended; registration is emitted as concrete calls—no reflection):
+**Register every `[OptifyOptions]` type in the current assembly** (recommended; registration is emitted as concrete 
+calls—no 
+reflection):
 
 ```csharp
 using Optify;
@@ -62,7 +67,7 @@ builder.Host.UseOptify();
 Useful for testing scenarios when you don't want to register all types in the assembly.
 
 ```csharp
-// No [Optify] attribute required to register by convention.
+// No [OptifyOptions] attribute required to register by convention.
 public class MyAppSettings
 {
     public string? ApiUrl { get; init; }

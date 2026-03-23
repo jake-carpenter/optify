@@ -7,7 +7,7 @@ namespace Optify;
 /// using the <see cref="IConfiguration"/> API.
 /// </summary>
 [AttributeUsage(AttributeTargets.Class)]
-public sealed class OptifyAttribute : Attribute
+public sealed class OptifyOptionsAttribute : Attribute
 {
     /// <summary>
     /// Manually specified <see cref="IConfigurationSection"/> name to bind to.
