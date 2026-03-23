@@ -9,7 +9,7 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="5.0.0" />
-    <PackageReference Include="Microsoft.Extensions.Hosting" Version="11.0.0-preview.2.26159.112" />
+    <PackageReference Include="Microsoft.Extensions.Hosting" Version="10.0.5" />
     <PackageReference Include="TUnit" Version="1.*" />
   </ItemGroup>
 
