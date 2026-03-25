@@ -82,4 +82,17 @@ public class UseOptifyTests
 
         await Assert.That(options!.Value.X).IsNull();
     }
+
+    [Test]
+    public async Task Should_allow_required_properties_on_type()
+    {
+        var host = new HostBuilder()
+            .IncludeConfiguration([new("DummySettingsWithRequiredKeyword:X", "one")])
+            .UseOptify()
+            .Build();
+
+        var options = host.Services.GetRequiredService<IOptions<DummySettingsWithRequiredKeyword>>();
+
+        await Assert.That(options.Value.X).IsEqualTo("one");
+    }
 }
