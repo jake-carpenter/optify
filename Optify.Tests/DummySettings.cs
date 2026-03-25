@@ -34,3 +34,9 @@ public class UnmarkedDummyClassSettings
 {
     public string? X { get; init; }
 }
+
+[OptifyOptions]
+public class DummySettingsWithRequiredKeyword
+{
+    public required string X { get; init; }
+}

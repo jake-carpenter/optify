@@ -14,7 +14,7 @@ public static class HostBuilderExtensions
     /// <param name="configuration">An instance of <see cref="OptifyConfiguration"/> to specify customized options.</param>
     /// <typeparam name="T">The type to map configured options to.</typeparam>
     /// <returns>The extended <see cref="IHostBuilder"/> instance.</returns>
-    public static IHostBuilder UseOptify<T>(this IHostBuilder hostBuilder, OptifyConfiguration configuration) where T : class, new()
+    public static IHostBuilder UseOptify<T>(this IHostBuilder hostBuilder, OptifyConfiguration configuration) where T : class
     {
         hostBuilder.ConfigureServices((ctx, services) =>
         {
@@ -45,6 +45,6 @@ public static class HostBuilderExtensions
     /// <param name="hostBuilder">The <see cref="IHostBuilder"/> instance to extend.</param>
     /// <typeparam name="T">The type to map configured options to.</typeparam>
     /// <returns>The extended <see cref="IHostBuilder"/> instance.</returns>
-    public static IHostBuilder UseOptify<T>(this IHostBuilder hostBuilder) where T : class, new() =>
+    public static IHostBuilder UseOptify<T>(this IHostBuilder hostBuilder) where T : class =>
         hostBuilder.UseOptify<T>(new OptifyConfiguration());
 }
