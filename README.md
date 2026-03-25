@@ -1,7 +1,6 @@
 # Optify
 
-**Optify** is a Roslyn source generator that wires [options pattern](https://learn.microsoft.
-com/en-us/dotnet/core/extensions/options) types into the generic host: mark a class or record with `[OptifyOptions]`, 
+**Optify** is a Roslyn source generator that wires [options pattern](https://learn.microsoft.com/en-us/dotnet/core/extensions/options) types into the generic host: mark a class or record with `[OptifyOptions]`, 
 call 
 `UseOptify()` on your `IHostBuilder`, and each type will automatically be bound to configuration based on the type name or the `SectionName` attribute.
 
