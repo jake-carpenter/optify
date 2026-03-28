@@ -24,8 +24,11 @@ public class OptifyGenerator : IIncrementalGenerator
                     var sectionNameArg = ctx.Attributes[0].NamedArguments
                         .FirstOrDefault(static x => x.Key == nameof(OptifyOptionsAttribute.SectionName));
                     var sectionName = sectionNameArg.Value.Value as string ?? ctx.TargetSymbol.Name;
+                    var validationArg = ctx.Attributes[0].NamedArguments
+                        .FirstOrDefault(static x => x.Key == nameof(OptifyOptionsAttribute.Validation));
+                    var validation = validationArg.Value.Value is int v ? v : 0;
 
-                    return new OptionsTypeToRegister(sectionName, fullName);
+                    return new OptionsTypeToRegister(sectionName, fullName, (ValidationFlag)validation);
                 });
 
         context.RegisterSourceOutput(

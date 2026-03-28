@@ -49,3 +49,17 @@ public class ValidatedDummySettings
     [Required]
     public string X { get; init; } = null!;
 }
+
+[OptifyOptions(Validation = ValidationFlag.DataAnnotations)]
+public class AttrValidatedDummySettings
+{
+    [Required]
+    public string? X { get; init; }
+}
+
+[OptifyOptions(Validation = ValidationFlag.DataAnnotations | ValidationFlag.OnStart)]
+public class AttrValidatedOnStartDummySettings
+{
+    [Required]
+    public string? X { get; init; }
+}

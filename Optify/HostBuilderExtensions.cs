@@ -19,22 +19,28 @@ public static class HostBuilderExtensions
     {
         hostBuilder.ConfigureServices((ctx, services) =>
         {
-            if (configuration.SectionName is not { Length: > 0 } sectionName)
-            {
-                var type = typeof(T);
-                var attribute = type
-                    .GetCustomAttributes(typeof(OptifyOptionsAttribute), false)
-                    .FirstOrDefault(a => a is OptifyOptionsAttribute);
+            var type = typeof(T);
+            var attribute = type
+                .GetCustomAttributes(typeof(OptifyOptionsAttribute), false)
+                .FirstOrDefault(a => a is OptifyOptionsAttribute);
 
-                sectionName = attribute is OptifyOptionsAttribute { SectionName.Length: > 0 } attr
-                    ? attr.SectionName
-                    : type.Name;
+            // Can come from 3 sources. Order of precedence:
+            // 1. `configuration.SectionName`
+            // 2. Attribute `SectionName`
+            // 3. `typeof(T).Name`
+            var sectionName = configuration.SectionName;
+            var validation = configuration.Validation;
+
+            if (attribute is OptifyOptionsAttribute attr)
+            {
+                sectionName ??= string.IsNullOrWhiteSpace(attr.SectionName) ? type.Name : attr.SectionName;
+                validation |= attr.Validation;
             }
 
             services
                 .AddOptions<T>()
-                .Bind(ctx.Configuration.GetSection(sectionName))
-                .MaybeAddValidation(configuration.Validation);
+                .Bind(ctx.Configuration.GetSection(sectionName!))
+                .MaybeAddValidation(validation);
         });
 
         return hostBuilder;
