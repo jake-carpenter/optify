@@ -5,14 +5,11 @@ namespace Optify;
 
 public static class OptionsBuilderExtensions
 {
-    public static void MaybeAddValidation<T>(this OptionsBuilder<T> builder, ValidationFlag validation)
+    public static OptionsBuilder<T> MaybeAddValidation<T>(this OptionsBuilder<T> builder, ValidationFlag validation)
         where T : class
     {
         var validateAnnotations = validation.HasFlag(ValidationFlag.DataAnnotations);
         var validateOnStart = validation.HasFlag(ValidationFlag.OnStart);
-
-        if (!validateAnnotations && !validateOnStart)
-            return;
 
         if (validateAnnotations)
         {
@@ -23,5 +20,7 @@ public static class OptionsBuilderExtensions
         {
             builder.ValidateOnStart();
         }
+
+        return builder;
     }
 }

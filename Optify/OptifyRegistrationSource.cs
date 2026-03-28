@@ -33,11 +33,11 @@ public static class OptifyRegistrationSource
                     {
                         var validation = (ValidationFlag)0;
             """);
-        sb.AppendLine(GenerateRegistrationStatements(optionsToRegister));
+        sb.Append(GenerateRegistrationStatements(optionsToRegister));
         sb.AppendLine(
             """
                     });
-
+                
                     return hostBuilder;
                 }
             """);
@@ -60,7 +60,7 @@ public static class OptifyRegistrationSource
         sb.AppendLine(
             """
                     });
-
+                
                     return hostBuilder;
                 }
             }
@@ -77,7 +77,19 @@ public static class OptifyRegistrationSource
             sb.AppendLine("            services");
             sb.AppendLine($"                .AddOptions<{optionsType.FullName}>()");
             sb.AppendLine($"                .Bind(ctx.Configuration.GetSection(\"{optionsType.SectionName}\"))");
-            sb.AppendLine($"                .MaybeAddValidation<{optionsType.FullName}>(validation);");
+            sb.Append($"                .MaybeAddValidation<{optionsType.FullName}>(validation)");
+
+            if (optionsType.Validation.HasFlag(ValidationFlag.DataAnnotations))
+            {
+                sb.AppendLine().Append("                .ValidateDataAnnotations()");
+            }
+
+            if (optionsType.Validation.HasFlag(ValidationFlag.OnStart))
+            {
+                sb.AppendLine().Append("                .ValidateOnStart()");
+            }
+
+            sb.AppendLine(";");
         }
 
         return sb.ToString();
