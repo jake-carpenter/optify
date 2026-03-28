@@ -11,7 +11,7 @@ public class UseOptifyTSectionNameTests
     {
         var host = new HostBuilder()
             .IncludeConfiguration([
-                ..TestHelpers.AllTestSettings,
+                ..TestData.AllTestSettings,
                 new("NamedDummyClassSettings:X", "came-from-type-name"), // wrong
                 new("OverrideNamedDummyClassSettings:X", "came-from-attribute"), // wrong
                 new("UseThisOne:X", "came-from-config-passed-to-extension")
@@ -29,7 +29,7 @@ public class UseOptifyTSectionNameTests
     {
         var host = new HostBuilder()
             .IncludeConfiguration([
-                ..TestHelpers.AllTestSettings,
+                ..TestData.AllTestSettings,
                 new("NamedDummyClassSettings:X", "came-from-type-name"), // wrong
                 new("OverrideNamedDummyClassSettings:X", "came-from-attribute"),
             ])
@@ -46,7 +46,7 @@ public class UseOptifyTSectionNameTests
     {
         var host = new HostBuilder()
             .IncludeConfiguration([
-                ..TestHelpers.AllTestSettings,
+                ..TestData.AllTestSettings,
                 new("DummyClassSettingsA:X", "came-from-type-name")
             ])
             .UseOptify<DummyClassSettingsA>(new OptifyConfiguration()) // no SectionName, type has no attribute SectionName
