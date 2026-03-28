@@ -114,4 +114,65 @@ public class UseOptifyTTests
 
         await Assert.That(options.Value.X).IsEqualTo("one");
     }
+
+    [Test]
+    public async Task Validates_data_annotations_when_configured_from_extension()
+    {
+        var host = new HostBuilder()
+            .IncludeConfiguration([new("ValidatedDummySettings:X", null)])
+            .UseOptify<ValidatedDummySettings>(new OptifyConfiguration { Validation = ValidationFlag.DataAnnotations })
+            .Build();
+
+        var options = host.Services.GetRequiredService<IOptions<ValidatedDummySettings>>();
+
+        await Assert.That(() => options.Value).Throws<OptionsValidationException>();
+    }
+
+    [Test]
+    public async Task Validation_does_not_throw_when_data_annotations_are_satisfied_from_extension()
+    {
+        var host = new HostBuilder()
+            .IncludeConfiguration([new("ValidatedDummySettings:X", "one")])
+            .UseOptify<ValidatedDummySettings>(new OptifyConfiguration { Validation = ValidationFlag.DataAnnotations })
+            .Build();
+
+        var options = host.Services.GetRequiredService<IOptions<ValidatedDummySettings>>();
+
+        await Assert.That(options.Value.X).IsEqualTo("one");
+    }
+
+    [Test]
+    public async Task Validates_on_start_when_configured_from_extension()
+    {
+        var host = new HostBuilder()
+            .IncludeConfiguration([new("ValidatedDummySettings:X", null)])
+            .UseOptify<ValidatedDummySettings>(new OptifyConfiguration
+            {
+                Validation = ValidationFlag.DataAnnotations | ValidationFlag.OnStart
+            })
+            .Build();
+
+        var options = host.Services.GetRequiredService<IOptions<ValidatedDummySettings>>();
+
+        await Assert.That(() => host.StartAsync()).Throws<OptionsValidationException>();
+    }
+
+    [Test]
+    public async Task Validates_when_created_when_validate_on_start_not_configured_from_extension()
+    {
+        var host = new HostBuilder()
+            .IncludeConfiguration([new("ValidatedDummySettings:X", null)])
+            .UseOptify<ValidatedDummySettings>(new OptifyConfiguration { Validation = ValidationFlag.DataAnnotations })
+            .Build();
+
+        await Assert.That(() => host.StartAsync()).ThrowsNothing();
+
+        await Assert
+            .That(() =>
+            {
+                var options = host.Services.GetRequiredService<IOptions<ValidatedDummySettings>>();
+                return options.Value; // Have to access 'Value' to trigger validation.
+            })
+            .Throws<OptionsValidationException>();
+    }
 }

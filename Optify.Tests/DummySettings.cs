@@ -1,3 +1,5 @@
+using System.ComponentModel.DataAnnotations;
+
 namespace Optify.Tests;
 
 [OptifyOptions]
@@ -39,4 +41,11 @@ public class UnmarkedDummyClassSettings
 public class DummySettingsWithRequiredKeyword
 {
     public required string X { get; init; }
+}
+
+[OptifyOptions]
+public class ValidatedDummySettings
+{
+    [Required]
+    public string X { get; init; } = null!;
 }

@@ -31,17 +31,40 @@ public static class OptifyRegistrationSource
                 {
                     hostBuilder.ConfigureServices((ctx, services) =>
                     {
+                        var validation = (ValidationFlag)0;
             """);
         sb.AppendLine(GenerateRegistrationStatements(optionsToRegister));
         sb.AppendLine(
             """
                     });
-                
+
+                    return hostBuilder;
+                }
+            """);
+
+        sb.AppendLine(
+            """
+                /// <summary>
+                /// Register all configurable options types in the current assembly marked with the
+                /// <see cref="OptifyOptionsAttribute"/> attribute.
+                /// </summary>
+                /// <param name="hostBuilder">The <see cref="IHostBuilder"/> instance to extend.</param>
+                /// <param name="validation">Specifies which validation behaviors to apply to the options registration.</param>
+                /// <returns>The extended <see cref="IHostBuilder"/> instance.</returns>
+                public static IHostBuilder UseOptify(this IHostBuilder hostBuilder, ValidationFlag validation)
+                {
+                    hostBuilder.ConfigureServices((ctx, services) =>
+                    {
+            """);
+        sb.Append(GenerateRegistrationStatements(optionsToRegister));
+        sb.AppendLine(
+            """
+                    });
+
                     return hostBuilder;
                 }
             }
             """);
-
         return sb.ToString();
     }
 
@@ -52,8 +75,9 @@ public static class OptifyRegistrationSource
         foreach (var optionsType in optionsToRegister)
         {
             sb.AppendLine("            services");
-            sb.AppendLine($"               .AddOptions<{optionsType.FullName}>()");
-            sb.AppendLine($"               .Bind(ctx.Configuration.GetSection(\"{optionsType.SectionName}\"));");
+            sb.AppendLine($"                .AddOptions<{optionsType.FullName}>()");
+            sb.AppendLine($"                .Bind(ctx.Configuration.GetSection(\"{optionsType.SectionName}\"))");
+            sb.AppendLine($"                .MaybeAddValidation<{optionsType.FullName}>(validation);");
         }
 
         return sb.ToString();
