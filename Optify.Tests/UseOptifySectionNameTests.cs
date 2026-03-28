@@ -11,7 +11,7 @@ public class UseOptifySectionNameTests
     {
         var host = new HostBuilder()
             .IncludeConfiguration([
-                ..TestHelpers.AllTestSettings,
+                ..TestData.AllTestSettings,
                 new("NamedDummyClassSettings:X", "came-from-type-name"),
                 new("OverrideNamedDummyClassSettings:X", "came-from-attribute")
             ])
@@ -28,7 +28,7 @@ public class UseOptifySectionNameTests
     {
         var host = new HostBuilder()
             .IncludeConfiguration([
-                ..TestHelpers.AllTestSettings,
+                ..TestData.AllTestSettings,
                 new("DummyClassSettingsA:X", "came-from-type-name")
             ])
             .UseOptify()

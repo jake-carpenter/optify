@@ -11,7 +11,7 @@ public class UseOptifyValidationTests
     {
         var host = new HostBuilder()
             .IncludeConfiguration([
-                ..TestHelpers.AllTestSettings,
+                ..TestData.AllTestSettings,
                 new("ValidatedDummySettings:X", null)
             ])
             .UseOptify(ValidationFlag.DataAnnotations)
@@ -23,19 +23,20 @@ public class UseOptifyValidationTests
     }
 
     [Test]
-    public async Task Validation_does_not_throw_when_data_annotations_are_satisfied_from_extension()
+    [MethodDataSource<TestData>(nameof(TestData.GenericStringTestData))]
+    public async Task Validation_does_not_throw_when_data_annotations_are_satisfied_from_extension(string value)
     {
         var host = new HostBuilder()
             .IncludeConfiguration([
-                ..TestHelpers.AllTestSettings,
-                new("ValidatedDummySettings:X", "one")
+                ..TestData.AllTestSettings,
+                new("ValidatedDummySettings:X", value)
             ])
             .UseOptify(ValidationFlag.DataAnnotations)
             .Build();
 
         var options = host.Services.GetRequiredService<IOptions<ValidatedDummySettings>>();
 
-        await Assert.That(options.Value.X).IsEqualTo("one");
+        await Assert.That(options.Value.X).IsEqualTo(value);
     }
 
     [Test]
@@ -43,7 +44,7 @@ public class UseOptifyValidationTests
     {
         var host = new HostBuilder()
             .IncludeConfiguration([
-                ..TestHelpers.AllTestSettings,
+                ..TestData.AllTestSettings,
                 new("ValidatedDummySettings:X", null)
             ])
             .UseOptify(ValidationFlag.DataAnnotations | ValidationFlag.OnStart)
@@ -57,9 +58,9 @@ public class UseOptifyValidationTests
     {
         var host = new HostBuilder()
             .IncludeConfiguration([
-                ..TestHelpers.AllTestSettings,
+                ..TestData.AllTestSettings,
                 new("ValidatedDummySettings:X", null),
-                new("AttrValidatedOnStartDummySettings:X", "one")
+                new("AttrValidatedOnStartDummySettings:X", "arbitrary")
             ])
             .UseOptify(ValidationFlag.DataAnnotations)
             .Build();
@@ -80,7 +81,7 @@ public class UseOptifyValidationTests
     {
         var host = new HostBuilder()
             .IncludeConfiguration([
-                ..TestHelpers.AllTestSettings,
+                ..TestData.AllTestSettings,
                 new("AttrValidatedDummySettings:X", null)
             ])
             .UseOptify()
@@ -96,7 +97,7 @@ public class UseOptifyValidationTests
     {
         var host = new HostBuilder()
             .IncludeConfiguration([
-                ..TestHelpers.AllTestSettings,
+                ..TestData.AllTestSettings,
                 new("AttrValidatedOnStartDummySettings:X", null)
             ])
             .UseOptify(ValidationFlag.DataAnnotations | ValidationFlag.OnStart)
@@ -106,19 +107,20 @@ public class UseOptifyValidationTests
     }
 
     [Test]
-    public async Task Validation_does_not_throw_when_data_annotations_are_satisfied_from_attribute()
+    [MethodDataSource<TestData>(nameof(TestData.GenericStringTestData))]
+    public async Task Validation_does_not_throw_when_data_annotations_are_satisfied_from_attribute(string value)
     {
         var host = new HostBuilder()
             .IncludeConfiguration([
-                ..TestHelpers.AllTestSettings,
-                new("AttrValidatedDummySettings:X", "one")
+                ..TestData.AllTestSettings,
+                new("AttrValidatedDummySettings:X", value)
             ])
             .UseOptify()
             .Build();
 
         var options = host.Services.GetRequiredService<IOptions<AttrValidatedDummySettings>>();
 
-        await Assert.That(options.Value.X).IsEqualTo("one");
+        await Assert.That(options.Value.X).IsEqualTo(value);
     }
 
     [Test]
@@ -126,7 +128,7 @@ public class UseOptifyValidationTests
     {
         var host = new HostBuilder()
             .IncludeConfiguration([
-                ..TestHelpers.AllTestSettings,
+                ..TestData.AllTestSettings,
                 new("AttrValidatedDummySettings:X", null)
             ])
             .UseOptify()

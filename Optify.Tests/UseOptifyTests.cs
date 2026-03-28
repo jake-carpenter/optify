@@ -11,9 +11,9 @@ public class UseOptifyTests
     {
         var host = new HostBuilder()
             .IncludeConfiguration([
-                ..TestHelpers.AllTestSettings,
-                new("DummyClassSettingsA:X", "one"),
-                new("DummyClassSettingsB:X", "two")
+                ..TestData.AllTestSettings,
+                new("DummyClassSettingsA:X", "a-value"),
+                new("DummyClassSettingsB:X", "b-value")
             ])
             .UseOptify()
             .Build();
@@ -22,34 +22,34 @@ public class UseOptifyTests
         var optionsB = host.Services.GetRequiredService<IOptions<DummyClassSettingsB>>();
 
         using var _ = Assert.Multiple();
-        await Assert.That(optionsA.Value.X).IsEqualTo("one");
-        await Assert.That(optionsB.Value.X).IsEqualTo("two");
+        await Assert.That(optionsA.Value.X).IsEqualTo("a-value");
+        await Assert.That(optionsB.Value.X).IsEqualTo("b-value");
     }
 
     [Test]
-    public async Task Registers_all_marked_records()
+    [MethodDataSource<TestData>(nameof(TestData.GenericStringTestData))]
+    public async Task Registers_all_marked_records(string value)
     {
         var host = new HostBuilder()
             .IncludeConfiguration([
-                ..TestHelpers.AllTestSettings,
-                new("DummyRecordSettings:X", "one")
+                ..TestData.AllTestSettings,
+                new("DummyRecordSettings:X", value)
             ])
             .UseOptify()
             .Build();
 
         var options = host.Services.GetRequiredService<IOptions<DummyRecordSettings>>();
 
-        await Assert.That(options.Value.X).IsEqualTo("one");
+        await Assert.That(options.Value.X).IsEqualTo(value);
     }
 
     [Test]
-    [Arguments("foo")]
-    [Arguments("bar")]
+    [MethodDataSource<TestData>(nameof(TestData.GenericStringTestData))]
     public async Task Registers_marked_class_with_provided_name(string value)
     {
         var host = new HostBuilder()
             .IncludeConfiguration([
-                ..TestHelpers.AllTestSettings,
+                ..TestData.AllTestSettings,
                 new("OverrideNamedDummyClassSettings:X", value)
             ])
             .UseOptify()
@@ -61,13 +61,12 @@ public class UseOptifyTests
     }
 
     [Test]
-    [Arguments("foo")]
-    [Arguments("bar")]
+    [MethodDataSource<TestData>(nameof(TestData.GenericStringTestData))]
     public async Task Registers_marked_record_with_provided_name(string value)
     {
         var host = new HostBuilder()
             .IncludeConfiguration([
-                ..TestHelpers.AllTestSettings,
+                ..TestData.AllTestSettings,
                 new("OverrideNamedDummyRecordSettings:X", value)
             ])
             .UseOptify()
@@ -83,8 +82,8 @@ public class UseOptifyTests
     {
         var host = new HostBuilder()
             .IncludeConfiguration([
-                ..TestHelpers.AllTestSettings,
-                new("UnmarkedDummyClassSettings:Setting", "three")
+                ..TestData.AllTestSettings,
+                new("UnmarkedDummyClassSettings:Setting", "arbitrary")
             ])
             .UseOptify()
             .Build();
@@ -95,18 +94,19 @@ public class UseOptifyTests
     }
 
     [Test]
-    public async Task Should_allow_required_properties_on_type()
+    [MethodDataSource<TestData>(nameof(TestData.GenericStringTestData))]
+    public async Task Should_allow_required_properties_on_type(string value)
     {
         var host = new HostBuilder()
             .IncludeConfiguration([
-                ..TestHelpers.AllTestSettings,
-                new("DummySettingsWithRequiredKeyword:X", "one")
+                ..TestData.AllTestSettings,
+                new("DummySettingsWithRequiredKeyword:X", value)
             ])
             .UseOptify()
             .Build();
 
         var options = host.Services.GetRequiredService<IOptions<DummySettingsWithRequiredKeyword>>();
 
-        await Assert.That(options.Value.X).IsEqualTo("one");
+        await Assert.That(options.Value.X).IsEqualTo(value);
     }
 }
