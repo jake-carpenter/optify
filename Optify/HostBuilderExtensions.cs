@@ -14,7 +14,8 @@ public static class HostBuilderExtensions
     /// <param name="configuration">An instance of <see cref="OptifyConfiguration"/> to specify customized options.</param>
     /// <typeparam name="T">The type to map configured options to.</typeparam>
     /// <returns>The extended <see cref="IHostBuilder"/> instance.</returns>
-    public static IHostBuilder UseOptify<T>(this IHostBuilder hostBuilder, OptifyConfiguration configuration) where T : class
+    public static IHostBuilder UseOptify<T>(this IHostBuilder hostBuilder, OptifyConfiguration configuration)
+        where T : class
     {
         hostBuilder.ConfigureServices((ctx, services) =>
         {
@@ -32,7 +33,8 @@ public static class HostBuilderExtensions
 
             services
                 .AddOptions<T>()
-                .Bind(ctx.Configuration.GetSection(sectionName));
+                .Bind(ctx.Configuration.GetSection(sectionName))
+                .MaybeAddValidation(configuration.Validation);
         });
 
         return hostBuilder;
