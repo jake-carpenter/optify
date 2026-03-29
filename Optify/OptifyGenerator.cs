@@ -17,24 +17,17 @@ public class OptifyGenerator : IIncrementalGenerator
                 if (ctx.TargetSymbol is not INamedTypeSymbol target)
                     return new OptionsTypeToRegister();
 
-                var fullName = target.ToDisplayString(
-                    SymbolDisplayFormat.FullyQualifiedFormat.WithGlobalNamespaceStyle(
-                        SymbolDisplayGlobalNamespaceStyle.Omitted
-                    )
-                );
-                var sectionNameArg = ctx.Attributes[0]
-                    .NamedArguments.FirstOrDefault(static x => x.Key == nameof(OptifyOptionsAttribute.SectionName));
-                var sectionName = sectionNameArg.Value.Value as string ?? ctx.TargetSymbol.Name;
-                var validationArg = ctx.Attributes[0]
-                    .NamedArguments.FirstOrDefault(static x => x.Key == nameof(OptifyOptionsAttribute.Validation));
-                var validation = validationArg.Value.Value is int v ? v : 0;
-
-                return new OptionsTypeToRegister(sectionName, fullName, (ValidationFlag)validation);
+                // At this point, ctx.Attributes *only* contains OptifyOptionsAttribute, even
+                // when other attributes are on the type. A user should receive a compiler error
+                // CS0579 if they added more than one [OptifyOptions]. However, generated source
+                // may be able to bypass that. In such a case, we're just going to assume
+                // that we'll take the first one.
+                return new OptionsTypeToRegister(ctx.Attributes[0], target);
             }
         );
 
         context.RegisterSourceOutput(
-            provider.Where(static opt => !opt.IsNull).Collect(),
+            provider.Where(static opt => opt.IsValid).Collect(),
             static (spc, types) =>
             {
                 spc.AddSource(OptifyRegistrationSource.Filename, OptifyRegistrationSource.GenerateSource(types));
