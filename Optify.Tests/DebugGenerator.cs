@@ -9,11 +9,13 @@ public class DebugGenerator
     public Task Should_allow_the_debugger_in_the_generator()
     {
         var generator = new OptifyGenerator();
-        var compilation = CSharpCompilation.Create("CSharpCodeGen.GenerateAssembly")
+        var compilation = CSharpCompilation
+            .Create("CSharpCodeGen.GenerateAssembly")
             .AddSyntaxTrees(CSharpSyntaxTree.ParseText(DebugGeneratorSource.Source))
             .AddReferences(MetadataReference.CreateFromFile(typeof(object).Assembly.Location))
             .WithOptions(new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary));
-        var driver = CSharpGeneratorDriver.Create(generator)
+        var driver = CSharpGeneratorDriver
+            .Create(generator)
             .RunGeneratorsAndUpdateCompilation(compilation, out _, out _);
 
         driver.GetRunResult();
@@ -24,8 +26,7 @@ public class DebugGenerator
 file static class DebugGeneratorSource
 {
     // This will need to be expanded for every type to generate for while debugging.
-    public const string Source =
-        """
+    public const string Source = """
         using Optify;
         namespace CSharpCodeGen;
 

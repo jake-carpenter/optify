@@ -11,9 +11,9 @@ public class UseOptifySectionNameTests
     {
         var host = new HostBuilder()
             .IncludeConfiguration([
-                ..TestData.AllTestSettings,
+                .. TestData.AllTestSettings,
                 new("NamedDummyClassSettings:X", "came-from-type-name"),
-                new("OverrideNamedDummyClassSettings:X", "came-from-attribute")
+                new("OverrideNamedDummyClassSettings:X", "came-from-attribute"),
             ])
             .UseOptify()
             .Build();
@@ -27,10 +27,7 @@ public class UseOptifySectionNameTests
     public async Task Registers_section_name_from_type_name_as_second_priority()
     {
         var host = new HostBuilder()
-            .IncludeConfiguration([
-                ..TestData.AllTestSettings,
-                new("DummyClassSettingsA:X", "came-from-type-name")
-            ])
+            .IncludeConfiguration([.. TestData.AllTestSettings, new("DummyClassSettingsA:X", "came-from-type-name")])
             .UseOptify()
             .Build();
 

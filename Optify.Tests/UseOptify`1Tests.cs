@@ -11,10 +11,7 @@ public class UseOptifyTTests
     public async Task Registers_class_using_convention_name(string value)
     {
         var host = new HostBuilder()
-            .IncludeConfiguration([
-                ..TestData.AllTestSettings,
-                new("DummyClassSettingsA:X", value)
-            ])
+            .IncludeConfiguration([.. TestData.AllTestSettings, new("DummyClassSettingsA:X", value)])
             .UseOptify<DummyClassSettingsA>()
             .Build();
 
@@ -28,10 +25,7 @@ public class UseOptifyTTests
     public async Task Registers_record_using_convention_name(string value)
     {
         var host = new HostBuilder()
-            .IncludeConfiguration([
-                ..TestData.AllTestSettings,
-                new("DummyRecordSettings:X", value)
-            ])
+            .IncludeConfiguration([.. TestData.AllTestSettings, new("DummyRecordSettings:X", value)])
             .UseOptify<DummyRecordSettings>()
             .Build();
 
@@ -45,10 +39,7 @@ public class UseOptifyTTests
     public async Task Registers_class_using_specified_name_on_attribute(string value)
     {
         var host = new HostBuilder()
-            .IncludeConfiguration([
-                ..TestData.AllTestSettings,
-                new("OverrideNamedDummyClassSettings:X", value)
-            ])
+            .IncludeConfiguration([.. TestData.AllTestSettings, new("OverrideNamedDummyClassSettings:X", value)])
             .UseOptify<NamedDummyClassSettings>()
             .Build();
 
@@ -62,10 +53,7 @@ public class UseOptifyTTests
     public async Task Registers_record_using_specified_name_on_attribute(string value)
     {
         var host = new HostBuilder()
-            .IncludeConfiguration([
-                ..TestData.AllTestSettings,
-                new("OverrideNamedDummyRecordSettings:X", value)
-            ])
+            .IncludeConfiguration([.. TestData.AllTestSettings, new("OverrideNamedDummyRecordSettings:X", value)])
             .UseOptify<NamedDummyRecordSettings>()
             .Build();
 
@@ -79,10 +67,7 @@ public class UseOptifyTTests
     public async Task Registers_class_using_specified_name_from_extension(string value)
     {
         var host = new HostBuilder()
-            .IncludeConfiguration([
-                ..TestData.AllTestSettings,
-                new("OverrideDummyClassSettingsA:X", value)
-            ])
+            .IncludeConfiguration([.. TestData.AllTestSettings, new("OverrideDummyClassSettingsA:X", value)])
             .UseOptify<DummyClassSettingsA>(new OptifyConfiguration { SectionName = "OverrideDummyClassSettingsA" })
             .Build();
 
@@ -96,10 +81,7 @@ public class UseOptifyTTests
     public async Task Registers_record_using_specified_name_from_extension(string value)
     {
         var host = new HostBuilder()
-            .IncludeConfiguration([
-                ..TestData.AllTestSettings,
-                new("OverrideDummyRecordSettings:X", value)
-            ])
+            .IncludeConfiguration([.. TestData.AllTestSettings, new("OverrideDummyRecordSettings:X", value)])
             .UseOptify<DummyRecordSettings>(new OptifyConfiguration { SectionName = "OverrideDummyRecordSettings" })
             .Build();
 
@@ -126,10 +108,7 @@ public class UseOptifyTTests
     public async Task Should_allow_required_properties_on_type(string value)
     {
         var host = new HostBuilder()
-            .IncludeConfiguration([
-                ..TestData.AllTestSettings,
-                new("DummySettingsWithRequiredKeyword:X", value)
-            ])
+            .IncludeConfiguration([.. TestData.AllTestSettings, new("DummySettingsWithRequiredKeyword:X", value)])
             // This would be a type error if this test is going to fail.
             .UseOptify<DummySettingsWithRequiredKeyword>()
             .Build();

@@ -14,6 +14,7 @@ app.MapGet(
     (IOptionsSnapshot<Settings> options, IOptionsSnapshot<ServiceSettings> serviceOptions) =>
     {
         return Results.Ok(new { options.Value.MagicValue, serviceOptions.Value.BaseUrl });
-    });
+    }
+);
 
 app.Run();
