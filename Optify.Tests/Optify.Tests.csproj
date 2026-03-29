@@ -1,5 +1,4 @@
 <Project Sdk="Microsoft.NET.Sdk">
-
   <PropertyGroup>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
@@ -14,7 +13,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Optify\Optify.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="true" />
+    <ProjectReference
+      Include="..\Optify\Optify.csproj"
+      OutputItemType="Analyzer"
+      ReferenceOutputAssembly="true"
+    />
   </ItemGroup>
-
 </Project>

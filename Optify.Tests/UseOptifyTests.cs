@@ -11,9 +11,9 @@ public class UseOptifyTests
     {
         var host = new HostBuilder()
             .IncludeConfiguration([
-                ..TestData.AllTestSettings,
+                .. TestData.AllTestSettings,
                 new("DummyClassSettingsA:X", "a-value"),
-                new("DummyClassSettingsB:X", "b-value")
+                new("DummyClassSettingsB:X", "b-value"),
             ])
             .UseOptify()
             .Build();
@@ -31,10 +31,7 @@ public class UseOptifyTests
     public async Task Registers_all_marked_records(string value)
     {
         var host = new HostBuilder()
-            .IncludeConfiguration([
-                ..TestData.AllTestSettings,
-                new("DummyRecordSettings:X", value)
-            ])
+            .IncludeConfiguration([.. TestData.AllTestSettings, new("DummyRecordSettings:X", value)])
             .UseOptify()
             .Build();
 
@@ -48,10 +45,7 @@ public class UseOptifyTests
     public async Task Registers_marked_class_with_provided_name(string value)
     {
         var host = new HostBuilder()
-            .IncludeConfiguration([
-                ..TestData.AllTestSettings,
-                new("OverrideNamedDummyClassSettings:X", value)
-            ])
+            .IncludeConfiguration([.. TestData.AllTestSettings, new("OverrideNamedDummyClassSettings:X", value)])
             .UseOptify()
             .Build();
 
@@ -65,10 +59,7 @@ public class UseOptifyTests
     public async Task Registers_marked_record_with_provided_name(string value)
     {
         var host = new HostBuilder()
-            .IncludeConfiguration([
-                ..TestData.AllTestSettings,
-                new("OverrideNamedDummyRecordSettings:X", value)
-            ])
+            .IncludeConfiguration([.. TestData.AllTestSettings, new("OverrideNamedDummyRecordSettings:X", value)])
             .UseOptify()
             .Build();
 
@@ -81,10 +72,7 @@ public class UseOptifyTests
     public async Task Should_not_register_unmarked_types()
     {
         var host = new HostBuilder()
-            .IncludeConfiguration([
-                ..TestData.AllTestSettings,
-                new("UnmarkedDummyClassSettings:Setting", "arbitrary")
-            ])
+            .IncludeConfiguration([.. TestData.AllTestSettings, new("UnmarkedDummyClassSettings:Setting", "arbitrary")])
             .UseOptify()
             .Build();
 
@@ -98,10 +86,7 @@ public class UseOptifyTests
     public async Task Should_allow_required_properties_on_type(string value)
     {
         var host = new HostBuilder()
-            .IncludeConfiguration([
-                ..TestData.AllTestSettings,
-                new("DummySettingsWithRequiredKeyword:X", value)
-            ])
+            .IncludeConfiguration([.. TestData.AllTestSettings, new("DummySettingsWithRequiredKeyword:X", value)])
             .UseOptify()
             .Build();
 

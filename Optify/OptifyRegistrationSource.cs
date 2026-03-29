@@ -32,7 +32,8 @@ public static class OptifyRegistrationSource
                     hostBuilder.ConfigureServices((ctx, services) =>
                     {
                         var validation = (ValidationFlag)0;
-            """);
+            """
+        );
         sb.Append(GenerateRegistrationStatements(optionsToRegister));
         sb.AppendLine(
             """
@@ -40,7 +41,8 @@ public static class OptifyRegistrationSource
                 
                     return hostBuilder;
                 }
-            """);
+            """
+        );
 
         sb.AppendLine(
             """
@@ -55,7 +57,8 @@ public static class OptifyRegistrationSource
                 {
                     hostBuilder.ConfigureServices((ctx, services) =>
                     {
-            """);
+            """
+        );
         sb.Append(GenerateRegistrationStatements(optionsToRegister));
         sb.AppendLine(
             """
@@ -64,7 +67,8 @@ public static class OptifyRegistrationSource
                     return hostBuilder;
                 }
             }
-            """);
+            """
+        );
         return sb.ToString();
     }
 
