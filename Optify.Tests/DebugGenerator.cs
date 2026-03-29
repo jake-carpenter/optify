@@ -12,7 +12,10 @@ public class DebugGenerator
         var compilation = CSharpCompilation
             .Create("CSharpCodeGen.GenerateAssembly")
             .AddSyntaxTrees(CSharpSyntaxTree.ParseText(DebugGeneratorSource.Source))
-            .AddReferences(MetadataReference.CreateFromFile(typeof(object).Assembly.Location))
+            .AddReferences(
+                MetadataReference.CreateFromFile(typeof(object).Assembly.Location),
+                MetadataReference.CreateFromFile(typeof(OptifyOptionsAttribute).Assembly.Location)
+            )
             .WithOptions(new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary));
         var driver = CSharpGeneratorDriver
             .Create(generator)
@@ -30,7 +33,8 @@ file static class DebugGeneratorSource
         using Optify;
         namespace CSharpCodeGen;
 
-        [OptifyOptions] public class Config;
+        [OptifyOptions]
+        public class Config;
 
         [OptifyOptions(SectionName = "OverrideNamedDummySettings")]
         public class NamedDummySettings;
