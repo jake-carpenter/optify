@@ -4,6 +4,8 @@ updates:
     directory: "/" # Location of package manifests
     schedule:
       interval: "weekly"
+    ignore:
+      - dependency-name: "Microsoft.Extensions.*"
 
   - package-ecosystem: "github-actions"
     directory: "/"
