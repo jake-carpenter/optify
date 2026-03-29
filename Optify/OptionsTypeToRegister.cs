@@ -1,21 +1,36 @@
+using Microsoft.CodeAnalysis;
+
 namespace Optify;
 
 public readonly record struct OptionsTypeToRegister
 {
-    public readonly bool IsNull;
-    public readonly string SectionName = string.Empty;
-    public readonly string FullName = string.Empty;
-    public readonly ValidationFlag Validation = 0;
+    public bool IsValid { get; }
+    public string SectionName { get; } = string.Empty;
+    public string FullName { get; } = string.Empty;
+    public ValidationFlag Validation { get; }
 
-    public OptionsTypeToRegister(string sectionName, string fullName, ValidationFlag validation)
+    public OptionsTypeToRegister(AttributeData attributeData, INamedTypeSymbol targetType)
     {
-        SectionName = sectionName;
-        FullName = fullName;
-        Validation = validation;
+        FullName = targetType.ToDisplayString();
+        SectionName = targetType.Name;
+        IsValid = true;
+
+        foreach (var argument in attributeData.NamedArguments)
+        {
+            switch (argument.Key)
+            {
+                case nameof(OptifyOptionsAttribute.SectionName):
+                    SectionName = argument.Value.Value as string ?? targetType.Name;
+                    break;
+                case nameof(OptifyOptionsAttribute.Validation):
+                    Validation = argument.Value.Value is int intValue ? (ValidationFlag)intValue : 0;
+                    break;
+            }
+        }
     }
 
     public OptionsTypeToRegister()
     {
-        IsNull = true;
+        IsValid = false;
     }
 }
