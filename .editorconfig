@@ -1,0 +1,11 @@
+[*.{cs,csx}]
+# Note: This project uses CSharpier, so this is a much more limited set of rules
+# https://csharpier.com/docs/Configuration#editorconfig
+indent_style = space
+indent_size = 4
+max_line_length = 120
+
+[*.{config,csproj,props,slnx,targets,xaml,xml,json}]
+indent_style = space
+indent_size = 2
+max_line_length = 100
