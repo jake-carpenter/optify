@@ -6,6 +6,7 @@ updates:
       interval: "weekly"
     ignore:
       - dependency-name: "Microsoft.Extensions.*"
+      - dependency-name: "Microsoft.CodeAnalysis.*"
 
   - package-ecosystem: "github-actions"
     directory: "/"
