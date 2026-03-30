@@ -32,6 +32,7 @@
       PrivateAssets="all"
     />
     <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="5.0.0" PrivateAssets="all" />
+    <PackageReference Include="Scriban" Version="7.0.6" PrivateAssets="all" GeneratePathProperty="true" />
     <PackageReference Include="Microsoft.Extensions.Configuration" Version="[10.0,)" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="[10.0,)" />
     <PackageReference Include="Microsoft.Extensions.Options" Version="[10.0,)" />
@@ -49,7 +50,21 @@
       PackagePath="analyzers/dotnet/cs"
       Visible="false"
     />
+    <None
+      Include="$(PkgScriban)\lib\netstandard2.0\Scriban.dll"
+      Pack="true"
+      PackagePath="analyzers/dotnet/cs"
+      Visible="false"
+    />
   </ItemGroup>
+  <PropertyGroup>
+    <GetTargetPathDependsOn>$(GetTargetPathDependsOn);GetDependencyTargetPaths</GetTargetPathDependsOn>
+  </PropertyGroup>
+  <Target Name="GetDependencyTargetPaths">
+    <ItemGroup>
+      <TargetPathWithTargetPlatformMoniker Include="$(PkgScriban)\lib\netstandard2.0\Scriban.dll" IncludeRuntimeDependency="false" />
+    </ItemGroup>
+  </Target>
   <Target
     Name="Husky"
     AfterTargets="Restore"
