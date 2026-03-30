@@ -26,6 +26,9 @@
     <None Include="../README.md" Pack="true" PackagePath="/" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="OptifyRegistration.sbn-cs" />
+  </ItemGroup>
+  <ItemGroup>
     <PackageReference
       Include="Microsoft.CodeAnalysis.Analyzers"
       Version="5.3.0"
