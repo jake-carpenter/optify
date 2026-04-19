@@ -12,6 +12,16 @@ public class TestData
     }
 
     /// <summary>
+    /// Test data for null or whitespace strings.
+    /// </summary>
+    public static IEnumerable<string?> NullOrWhitespaceTestData()
+    {
+        yield return null;
+        yield return "";
+        yield return " ";
+    }
+
+    /// <summary>
     /// A valid entry for all properties on all dummy settings types in the testing project.
     /// Tests should start with this and override what is needed within the test.
     /// </summary>
@@ -23,9 +33,11 @@ public class TestData
         new("OverrideNamedDummyClassSettings:X", "valid"),
         new("OverrideNamedDummyRecordSettings:X", "valid"),
         new($"{nameof(UnmarkedDummyClassSettings)}:X", "valid"),
+        new($"{nameof(EmptySectionNameDummyClassSettings)}:X", "valid"),
         new($"{nameof(DummySettingsWithRequiredKeyword)}:X", "valid"),
         new($"{nameof(ValidatedDummySettings)}:X", "valid"),
         new($"{nameof(AttrValidatedDummySettings)}:X", "valid"),
         new($"{nameof(AttrValidatedOnStartDummySettings)}:X", "valid"),
+        new($"{nameof(AttrOnStartOnlyDummySettings)}:X", "valid"),
     ];
 }
