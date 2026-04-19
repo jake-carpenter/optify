@@ -21,26 +21,22 @@ public static class HostBuilderExtensions
             (ctx, services) =>
             {
                 var type = typeof(T);
-                var attribute = type.GetCustomAttributes(typeof(OptifyOptionsAttribute), false)
-                    .FirstOrDefault(a => a is OptifyOptionsAttribute);
+                var attribute =
+                    type.GetCustomAttributes(typeof(OptifyOptionsAttribute), false)
+                        .FirstOrDefault(a => a is OptifyOptionsAttribute) as OptifyOptionsAttribute;
 
                 // Can come from 3 sources. Order of precedence:
                 // 1. `configuration.SectionName`
                 // 2. Attribute `SectionName`
                 // 3. `typeof(T).Name`
-                var sectionName = configuration.SectionName;
-                var validation = configuration.Validation;
+                // ReSharper disable once ConditionalAccessQualifierIsNonNullableAccordingToAPIContract
+                var sectionName =
+                    NullIfWhitespace(configuration?.SectionName)
+                    ?? NullIfWhitespace(attribute?.SectionName)
+                    ?? type.Name;
+                var validation = (configuration?.Validation ?? 0) | (attribute?.Validation ?? 0);
 
-                if (attribute is OptifyOptionsAttribute attr)
-                {
-                    sectionName ??= string.IsNullOrWhiteSpace(attr.SectionName) ? type.Name : attr.SectionName;
-                    validation |= attr.Validation;
-                }
-
-                services
-                    .AddOptions<T>()
-                    .Bind(ctx.Configuration.GetSection(sectionName!))
-                    .MaybeAddValidation(validation);
+                services.AddOptions<T>().Bind(ctx.Configuration.GetSection(sectionName)).MaybeAddValidation(validation);
             }
         );
 
@@ -56,4 +52,6 @@ public static class HostBuilderExtensions
     /// <returns>The extended <see cref="IHostBuilder"/> instance.</returns>
     public static IHostBuilder UseOptify<T>(this IHostBuilder hostBuilder)
         where T : class => hostBuilder.UseOptify<T>(new OptifyConfiguration());
+
+    private static string? NullIfWhitespace(string? value) => string.IsNullOrWhiteSpace(value) ? null : value;
 }

@@ -37,6 +37,12 @@ public class UnmarkedDummyClassSettings
     public string? X { get; init; }
 }
 
+[OptifyOptions(SectionName = "")]
+public class EmptySectionNameDummyClassSettings
+{
+    public string? X { get; init; }
+}
+
 [OptifyOptions]
 public class DummySettingsWithRequiredKeyword
 {
@@ -59,6 +65,13 @@ public class AttrValidatedDummySettings
 
 [OptifyOptions(Validation = ValidationFlag.DataAnnotations | ValidationFlag.OnStart)]
 public class AttrValidatedOnStartDummySettings
+{
+    [Required]
+    public string? X { get; init; }
+}
+
+[OptifyOptions(Validation = ValidationFlag.OnStart)]
+public class AttrOnStartOnlyDummySettings
 {
     [Required]
     public string? X { get; init; }

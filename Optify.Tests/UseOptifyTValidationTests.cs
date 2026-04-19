@@ -121,4 +121,58 @@ public class UseOptifyTValidationTests
             })
             .Throws<OptionsValidationException>();
     }
+
+    [Test]
+    public async Task Combines_validation_flags_from_configuration_and_attribute()
+    {
+        // Attribute has OnStart, configuration has DataAnnotations
+        // Combined: DataAnnotations | OnStart = validates on startup
+        var host = new HostBuilder()
+            .IncludeConfiguration([.. TestData.AllTestSettings, new("AttrOnStartOnlyDummySettings:X", null)])
+            .UseOptify<AttrOnStartOnlyDummySettings>(
+                new OptifyConfiguration { Validation = ValidationFlag.DataAnnotations }
+            )
+            .Build();
+
+        await Assert.That(() => host.StartAsync()).Throws<OptionsValidationException>();
+    }
+
+    [Test]
+    public async Task Uses_attribute_validation_when_configuration_is_null()
+    {
+        var host = new HostBuilder()
+            .IncludeConfiguration([.. TestData.AllTestSettings, new("AttrValidatedDummySettings:X", null)])
+            .UseOptify<AttrValidatedDummySettings>(null!)
+            .Build();
+
+        var options = host.Services.GetRequiredService<IOptions<AttrValidatedDummySettings>>();
+
+        await Assert.That(() => options.Value).Throws<OptionsValidationException>();
+    }
+
+    [Test]
+    public async Task Uses_attribute_validation_when_configuration_has_no_validation()
+    {
+        var host = new HostBuilder()
+            .IncludeConfiguration([.. TestData.AllTestSettings, new("AttrValidatedDummySettings:X", null)])
+            .UseOptify<AttrValidatedDummySettings>(new OptifyConfiguration())
+            .Build();
+
+        var options = host.Services.GetRequiredService<IOptions<AttrValidatedDummySettings>>();
+
+        await Assert.That(() => options.Value).Throws<OptionsValidationException>();
+    }
+
+    [Test]
+    public async Task No_validation_when_neither_configuration_nor_attribute_specify_validation()
+    {
+        var host = new HostBuilder()
+            .IncludeConfiguration([.. TestData.AllTestSettings, new("DummyClassSettingsA:X", null)])
+            .UseOptify<DummyClassSettingsA>(new OptifyConfiguration())
+            .Build();
+
+        var options = host.Services.GetRequiredService<IOptions<DummyClassSettingsA>>();
+
+        await Assert.That(() => options.Value).ThrowsNothing();
+    }
 }
